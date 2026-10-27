@@ -1,0 +1,38 @@
+== 1. Admission ==
+  ok  admission is open (got open)
+  ok  baw wallet is CONNECTED (run baw auth signin / verify first if not)
+  wallet: 0x76A7870A01053eaad428d83e0103ddc52BD6535d
+== 2. Deployment & quota ==
+  ok  published freeMint matches 0x7538ba8C1A82E9706dB6d2463C15f69ADc01a17e
+  ok  published nft matches 0x053259A3D30E63d9447E3d90813C6a494bcB398a
+  ok  published agentGate matches 0xc8D8EebAd7Fdd590edA6d23164B1eC014913Ce8f
+  ok  published agentRegistry matches 0x60B9262456dE011F7d15a54CdD8c48bAaa8B022F
+  ok  chain id 56
+  ok  mintPrice 0 and failureFee 0
+  ok  maxMintsPerWallet 2, supplyCap 7777
+  ok  freeMint has code
+  ok  nft has code
+  ok  agentGate has code
+  ok  agentRegistry has code
+  ok  FreeMint.nft() = NFT
+  ok  NFT.minter() = FreeMint
+  ok  FreeMint.agentGate() = AgentGate
+  ok  FreeMint.signer() = protocol_info.signer
+  ok  FreeMint not paused
+  ok  NFT limits 2 / 7777
+  ok  AgentGate.registry() = published registry
+  ok  identityPolicy matches
+  ok  Agent ID "naman" owned by wallet
+  ok  AgentGate.isAuthorized(agentId, wallet)
+  ok  wallet has a mint left (used 0/2)
+  ok  supply available (7069/7777)
+== MCP sign-in ==
+  ok  sign-in domain
+  ok  SignIn for this wallet / audience
+  ok  challenge matches and not expired
+  ok  sign-in-only statement, not a Permit
+
+[NONCE MCP sign-in] wallet preview:
+  risks: {"addresses":{},"riskDetails":[],"riskBehaviors":[]}
+  approved (signin): Sign "NONCE MCP sign-in"?
+  ok  agent_identity confirms Agent ID
