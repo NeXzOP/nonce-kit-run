@@ -1,1 +1,2 @@
 17:32:46 runner up, 4 cores
+17:33:07 setup done
