@@ -1,0 +1,68 @@
+name: nonce
+on:
+  workflow_dispatch:
+  push:
+    paths: ['go.txt']
+permissions:
+  contents: write
+concurrency: nonce
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '22' }
+      - name: status helper
+        run: |
+          cat > /tmp/st.sh <<'S'
+          #!/bin/bash
+          cd $GITHUB_WORKSPACE; mkdir -p out; echo "$(TZ=Asia/Calcutta date +%T) $1" >> out/status.txt
+          [ -f run.log ] && grep -v "parsed message" run.log | tail -40 > out/log.txt
+          git config user.name bot; git config user.email bot@users.noreply.github.com
+          git add out; git commit -qm status || true; git pull -q --rebase || true; git push -q || true
+          S
+          chmod +x /tmp/st.sh; /tmp/st.sh "runner up, $(nproc) cores"
+      - name: setup
+        run: |
+          bash setup.sh
+          /tmp/st.sh "setup done"
+      - name: pair wallet
+        run: |
+          baw auth signin --json > /tmp/si.json
+          python3 -c "import json;d=json.load(open('/tmp/si.json'))['data'];print('PAIR',d['pairingCode'],d['urlForWeb'],d['qrCodeId'])" > /tmp/pair
+          /tmp/st.sh "$(cat /tmp/pair)"
+          Q=$(awk '{print $4}' /tmp/pair)
+          baw auth verify --qrCodeId $Q --json > /tmp/v.json 2>&1 || true
+          baw wallet status --json > /tmp/ws.json
+          /tmp/st.sh "wallet $(python3 -c "import json;print(json.load(open('/tmp/ws.json'))['data']['status'])")"
+      - name: attempt
+        run: |
+          mkdir -p approvals
+          end=$((SECONDS+1500)); n=0
+          while [ $SECONDS -lt $end ]; do
+            n=$((n+1)); touch approvals/signin approvals/mint
+            [ -f go-start.txt ] && touch approvals/start
+            ( while sleep 60; do /tmp/st.sh "try $n running" >/dev/null 2>&1; done ) & P=$!
+            APPROVAL_DIR=approvals timeout 1300 node nonce.mjs > run.log 2>&1; rc=$?
+            kill $P 2>/dev/null
+            V=$(grep -o "version [a-z0-9-]*" run.log | head -1)
+            /tmp/st.sh "try $n rc=$rc $V"
+            if [ $rc -eq 0 ] || grep -q "MINTED" run.log; then break; fi
+            if grep -q "NEEDS_APPROVAL start" run.log; then
+              /tmp/st.sh "WAITING_APPROVAL $V"
+              ok=0; for i in $(seq 1 24); do sleep 15; git pull -q --rebase || true; [ -f go-start.txt ] && { ok=1; break; }; [ -f skip.txt ] && break; done
+              if [ $ok = 1 ]; then continue; fi
+              git rm -q skip.txt 2>/dev/null; git commit -qm skip || true; git push -q || true
+              python3 -c "import json;s=json.load(open('state.json'));[s.pop(k,None) for k in ('idem','attemptId')];json.dump(s,open('state.json','w'))"
+              /tmp/st.sh "skipped $V"; sleep 30; continue
+            fi
+            if grep -q "ACTIVE" run.log; then break; fi
+            grep -q -E "got closed|retries exhausted|busy" run.log || break
+            python3 -c "import json;s=json.load(open('state.json'));[s.pop(k,None) for k in ('idem','attemptId')];json.dump(s,open('state.json','w'))" 2>/dev/null
+            sleep 45
+          done
+          rm -f approvals/* state.json
+          /tmp/st.sh "finished"
+          
