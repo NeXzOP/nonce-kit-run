@@ -1,3 +1,4 @@
 17:32:46 runner up, 4 cores
 17:33:07 setup done
 17:33:10 PAIR ff54d3 https://app.binance.com/uni-qr/VBDkBX7W e587b47c-7875-4972-9970-d192f1a40b65
+17:35:09 wallet CONNECTED
