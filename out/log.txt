@@ -36,3 +36,5 @@
   risks: {"addresses":{},"riskDetails":[],"riskBehaviors":[]}
   approved (signin): Sign "NONCE MCP sign-in"?
   ok  agent_identity confirms Agent ID
+  ok  wallet_status remainingMints 2, BNB 0.001566281011293612
+== 3. Prepare & start ONE attempt ==
