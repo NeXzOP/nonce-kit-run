@@ -1,12 +1,3 @@
-== 1. Admission ==
-  ok  admission is open (got open)
-  ok  baw wallet is CONNECTED (run baw auth signin / verify first if not)
-  wallet: 0x76A7870A01053eaad428d83e0103ddc52BD6535d
-== 2. Deployment & quota ==
-  ok  published freeMint matches 0x7538ba8C1A82E9706dB6d2463C15f69ADc01a17e
-  ok  published nft matches 0x053259A3D30E63d9447E3d90813C6a494bcB398a
-  ok  published agentGate matches 0xc8D8EebAd7Fdd590edA6d23164B1eC014913Ce8f
-  ok  published agentRegistry matches 0x60B9262456dE011F7d15a54CdD8c48bAaa8B022F
   ok  chain id 56
   ok  mintPrice 0 and failureFee 0
   ok  maxMintsPerWallet 2, supplyCap 7777
@@ -38,3 +29,12 @@
   ok  agent_identity confirms Agent ID
   ok  wallet_status remainingMints 2, BNB 0.001566281011293612
 == 3. Prepare & start ONE attempt ==
+  attempt 2d45964d-8555-4de3-969a-ce1893209a11 version nonce-logic-balanced-1536 state CREATED
+  ok  benchmark nonce-logic-balanced-1536: 1536 vars, 33792 clauses, 32 fragments, 96 reads, 900s
+  ok  StartAuthorization domain
+  ok  StartAuthorization for this wallet + attemptId hash
+
+[Start challenge (starts the clock)] wallet preview:
+  risks: {"addresses":{},"riskDetails":[],"riskBehaviors":[]}
+
+NEEDS_APPROVAL start: Sign "Start challenge (starts the clock)"?
